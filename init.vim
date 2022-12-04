@@ -48,6 +48,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'joshdick/onedark.vim'
 Plug 'dyng/ctrlsf.vim'
 Plug 'terryma/vim-multiple-cursors'
+Plug 'junegunn/fzf.vim'
 "Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
@@ -80,17 +81,10 @@ nnoremap <leader>q :q<cr>
 nnoremap <TAB> za
 nnoremap <leader><TAB> zA
 
-" for ctrlsf
-nmap     <C-F>f <Plug>CtrlSFPrompt
-vmap     <C-F>f <Plug>CtrlSFVwordPath
-vmap     <C-F>F <Plug>CtrlSFVwordExec
-nmap     <C-F>n <Plug>CtrlSFCwordPath
-nmap     <C-F>p <Plug>CtrlSFPwordPath
-nnoremap <C-F>o :CtrlSFOpen<CR>
-nnoremap <C-F>t :CtrlSFToggle<CR>
-inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
+" for fzf.vim
+nnoremap <silent> <C-P> :Files<CR>
 
-nnoremap <M-Enter> :vsplit term://zsh<cr>a
+nnoremap <M-Enter> :split term://zsh<cr>a
 " }}}
 
 " gui版本专用设置 {{{
