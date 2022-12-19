@@ -74,7 +74,15 @@ require('packer').startup(function(use)
   --lsp
   use 'neovim/nvim-lspconfig'
   --自动补全插件
-  --use {xxxxxxxxxx}
+  use {'hrsh7th/nvim-cmp', requires={
+    'hrsh7th/cmp-nvim-lsp',
+    'hrsh7th/cmp-buffer',
+    'hrsh7th/cmp-path',
+    'hrsh7th/cmp-cmdline',
+    "L3MON4D3/LuaSnip",
+    'rafamadriz/friendly-snippets',
+    'saadparwaiz1/cmp_luasnip'
+  }}
   --fuzzy search framework
   use {'nvim-telescope/telescope.nvim', tag = '0.1.0', requires = {'nvim-lua/plenary.nvim'}} 
 
@@ -101,8 +109,12 @@ require('telescope').setup {
         },
     }
 }
---[lsp server
-require('lspconfig').clangd.setup{}
+--[luasnip snippet相关
+require('luasnip.loaders.from_vscode').lazy_load()
+--[lsp以及补全相关的配置
+require('lsp.nvim-cmp')
+require('lsp.servers')
+require('lsp.keybindings')
 
 
 --[[
@@ -118,7 +130,3 @@ set_keymap('n', '<C-p>f', builtin.find_files, {})
 set_keymap('n', '<C-p>@', builtin.lsp_document_symbols, {})
 set_keymap('n', '<C-p>#', builtin.lsp_dynamic_workspace_symbols, {})
 set_keymap('n', '<C-p>s', builtin.live_grep, {})
-set_keymap('n', 'gr', builtin.lsp_references, {})
-set_keymap('n', 'gd', builtin.lsp_definitions, {})
-set_keymap('n', 'gi', builtin.lsp_implementations, {})
-set_keymap('n', 'K', vim.lsp.buf.hover, {})
