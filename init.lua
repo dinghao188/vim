@@ -36,7 +36,7 @@ local function source(file)
     vim.cmd('source ' .. file)
 end
 --2.2 快捷键映射函数
-local set_keymap = vim.api.nvim_set_keymap
+local set_keymap = vim.keymap.set
 
 --[[
 --3. 可能经常用到的一些值
@@ -69,12 +69,14 @@ require('packer').startup(function(use)
   use {'akinsho/bufferline.nvim', tag="v3.*", requires='nvim-tree/nvim-web-devicons'}
   --状态栏增强插件
   use {'vim-airline/vim-airline'}
-  --自动补全插件
-  use {'neoclide/coc.nvim', branch='release'}
-  --fzf
-  use 'junegunn/fzf.vim'
   --文本对齐
   use 'godlygeek/tabular'
+  --lsp
+  use 'neovim/nvim-lspconfig'
+  --自动补全插件
+  --use {xxxxxxxxxx}
+  --fuzzy search framework
+  use {'nvim-telescope/telescope.nvim', tag = '0.1.0', requires = {'nvim-lua/plenary.nvim'}} 
 
   --本地
   use '~/.config/nvim/hello'
@@ -89,9 +91,19 @@ vim.cmd [[colorscheme dracula]]
 --[airline
 vim.g.airline_powerline_fonts = 1
 --[bufferline
-require('bufferline').setup{}
---coc.nvim
-source(EXTRA_CONF_DIR .. 'coc.vim')
+require('bufferline').setup {}
+--[telescope.nvim
+require('telescope').setup {
+    defaults = {
+        layout_strategy = 'vertical',
+        layout_config = {
+            height = 0.95
+        },
+    }
+}
+--[lsp server
+require('lspconfig').clangd.setup{}
+
 
 --[[
 --5. 快捷键配置
@@ -100,9 +112,13 @@ set_keymap('n', '<SPACE>c', ':e $MYVIMRC<CR>', {noremap=true})
 set_keymap('n', '<TAB>', 'za', {noremap=true})
 set_keymap('n', '<C-h>', ':BufferLineCyclePrev<CR>', {noremap=true, silent=true})
 set_keymap('n', '<C-l>', ':BufferLineCycleNext<CR>', {noremap=true, silent=true})
---for fzf
-set_keymap('n', '<C-p>', '<Cmd>Files<CR>', {noremap=true, silent=true})
-set_keymap('n', '<C-p>@', '<Cmd>CocList outline<CR>', {noremap=true, silent=true})
---for coc-explorer
-set_keymap('n', '<C-e>', '<Cmd>CocCommand explorer<CR>', {noremap=true})
-set_keymap('i', '<C-e>', '<Cmd>CocCommand explorer<CR>', {noremap=true})
+
+local builtin = require('telescope.builtin')
+set_keymap('n', '<C-p>f', builtin.find_files, {})
+set_keymap('n', '<C-p>@', builtin.lsp_document_symbols, {})
+set_keymap('n', '<C-p>#', builtin.lsp_dynamic_workspace_symbols, {})
+set_keymap('n', '<C-p>s', builtin.live_grep, {})
+set_keymap('n', 'gr', builtin.lsp_references, {})
+set_keymap('n', 'gd', builtin.lsp_definitions, {})
+set_keymap('n', 'gi', builtin.lsp_implementations, {})
+set_keymap('n', 'K', vim.lsp.buf.hover, {})
