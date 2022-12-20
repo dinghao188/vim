@@ -81,13 +81,12 @@ require('packer').startup(function(use)
     'hrsh7th/cmp-cmdline',
     "L3MON4D3/LuaSnip",
     'rafamadriz/friendly-snippets',
-    'saadparwaiz1/cmp_luasnip'
+    'saadparwaiz1/cmp_luasnip',
+    'onsails/lspkind.nvim'
   }}
   --fuzzy search framework
   use {'nvim-telescope/telescope.nvim', tag = '0.1.0', requires = {'nvim-lua/plenary.nvim'}} 
 
-  --本地
-  use '~/.config/nvim/hello'
   if bootstrap_packer then
     require('packer').sync()
   end
